@@ -236,6 +236,14 @@ def send_page():
 def tokenomics_page():
     return render_template("tokenomics.html")
 
+@app.route("/whitepaper")
+def whitepaper_page():
+    return render_template("whitepaper.html")
+
+@app.route("/roadmap")
+def roadmap_page():
+    return render_template("roadmap.html")
+
 # ─── RECOVERY FLOW ─────────────────────────────────
 @app.route("/recovery")
 def recovery_page():
