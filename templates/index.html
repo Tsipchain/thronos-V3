@@ -34,6 +34,37 @@
         cursor: pointer;
     }
     .lang-en { display: none; }
+    .game-link {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #f0f;
+        color: #f0f;
+        display: inline-block;
+        text-decoration: none;
+    }
+    .game-link:hover {
+        background: #200;
+    }
+    .beta-section {
+        background: #1a001a;
+        padding: 15px;
+        margin-top: 20px;
+        border: 1px dashed #f0f;
+        color: #f0f;
+    }
+    .beta-btn {
+        background: #300030;
+        color: #f0f;
+        border: 1px solid #f0f;
+        padding: 8px 16px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+    .beta-btn:hover {
+        background: #500050;
+    }
   </style>
 </head>
 <body>
@@ -46,6 +77,7 @@
   <a href="/viewer" style="color:#0f0;margin:10px;">📦 <span class="lang-el">Εξερευνητής</span><span class="lang-en">Viewer</span></a>
   <a href="/send" style="color:#0f0;margin:10px;">💸 <span class="lang-el">Αποστολή</span><span class="lang-en">Send</span></a>
   <a href="/wallet" style="color:#0f0;margin:10px;">👛 <span class="lang-el">Πορτοφόλι</span><span class="lang-en">Wallet</span></a>
+  <a href="/tokenomics" style="color:#0f0;margin:10px;">📜 <span class="lang-el">Tokenomics</span><span class="lang-en">Tokenomics</span></a>
   <a href="/recovery" style="color:#0f0;margin:10px;">🛠️ <span class="lang-el">Ανάκτηση</span><span class="lang-en">Recovery</span></a>
 </div>
 
@@ -65,6 +97,22 @@
   <h3>💰 <span class="lang-el">Ισοτιμία</span><span class="lang-en">Exchange Rate</span></h3>
   <p>1 THR = <span class="highlight">0.0001 BTC</span> (Pegged)</p>
 </div>
+
+<!-- Crypto Hunters Beta Section -->
+<div class="beta-section">
+    <h3>🎮 <span class="lang-el">Crypto Hunters - Beta & Ψηφοφορία</span><span class="lang-en">Crypto Hunters - Beta & Voting</span></h3>
+    <p>
+        <span class="lang-el">Λάβετε μέρος στο κυνήγι! Βοηθήστε μας να δοκιμάσουμε το επερχόμενο παιχνίδι Crypto Hunters. Ψηφίστε για χαρακτηριστικά και κερδίστε ανταμοιβές.</span>
+        <span class="lang-en">Join the hunt! Help us test the upcoming Crypto Hunters game. Vote on features and earn rewards.</span>
+    </p>
+    <a href="#" class="beta-btn" onclick="alert('Coming Soon! / Σύντομα κοντά σας!')">
+        <span class="lang-el">🗳️ Ψηφίστε Τώρα (Σύντομα)</span><span class="lang-en">🗳️ Vote Now (Coming Soon)</span>
+    </a>
+</div>
+
+<a href="http://localhost:3000/panel" target="_blank" class="game-link">
+    👾 <span class="lang-el">Διαχείριση Crypto Hunters (Dev)</span><span class="lang-en">Crypto Hunters Admin (Dev)</span>
+</a>
 
 <script>
 function toggleLanguage() {
@@ -98,7 +146,6 @@ fetch("/chain")
   .then(data => {
     const blocks = data || [];
     const last = blocks[blocks.length - 1] || {};
-    const currentLang = localStorage.getItem('lang') || 'el';
     
     const labels = {
         el: {
@@ -114,10 +161,6 @@ fetch("/chain")
             timestamp: "Timestamp"
         }
     };
-
-    // We update the innerHTML dynamically, so we need to handle lang switch for this dynamic content too if we want it perfect, 
-    // but for simplicity, we will just render based on current lang load. 
-    // A better approach for dynamic content is to have spans with classes.
     
     const renderStats = () => {
         const lang = localStorage.getItem('lang') || 'el';
