@@ -10,6 +10,7 @@
 # - recovery flow via steganography
 # - Dynamic Difficulty & Halving
 # - AI Agent Auto-Registration
+# - Token Chart & Network Stats
 
 import os
 import json
@@ -244,6 +245,10 @@ def whitepaper_page():
 def roadmap_page():
     return render_template("roadmap.html")
 
+@app.route("/token_chart")
+def token_chart_page():
+    return render_template("token_chart.html")
+
 # ─── RECOVERY FLOW ─────────────────────────────────
 @app.route("/recovery")
 def recovery_page():
@@ -327,6 +332,40 @@ def mining_info():
         "reward": reward,
         "height": height
     }), 200
+
+@app.route("/api/network_stats")
+def network_stats():
+    pledges = load_json(PLEDGE_CHAIN, [])
+    chain = load_json(CHAIN_FILE, [])
+    ledger = load_json(LEDGER_FILE, {})
+    
+    # Calculate some stats
+    pledge_count = len(pledges)
+    tx_count = len(chain)
+    burned = ledger.get(BURN_ADDRESS, 0)
+    ai_balance = ledger.get(AI_WALLET_ADDRESS, 0)
+    
+    # Get pledge growth over time
+    pledge_dates = {}
+    for p in pledges:
+        # timestamp format: "2025-12-01 12:00:00 UTC"
+        ts = p.get("timestamp", "").split(" ")[0] # Just date
+        pledge_dates[ts] = pledge_dates.get(ts, 0) + 1
+        
+    sorted_dates = sorted(pledge_dates.keys())
+    cumulative_pledges = []
+    running_total = 0
+    for d in sorted_dates:
+        running_total += pledge_dates[d]
+        cumulative_pledges.append({"date": d, "count": running_total})
+        
+    return jsonify({
+        "pledge_count": pledge_count,
+        "tx_count": tx_count,
+        "burned": burned,
+        "ai_balance": ai_balance,
+        "pledge_growth": cumulative_pledges
+    })
 
 # ─── PLEDGE FLOW ───────────────────────────────────
 @app.route("/pledge")
